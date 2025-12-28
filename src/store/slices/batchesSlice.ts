@@ -84,7 +84,7 @@ export const fetchAllBatches = createAsyncThunk<
     };
     
     const response = await api.get<ApiResponse<FetchBatchesResponse>>(
-      '/api/v1/reconciliation',
+      '/reconciliation',
       { params: queryParams }
     );
     return response.data;
@@ -104,7 +104,7 @@ export const fetchBatchById = createAsyncThunk<
 >('batches/fetchById', async (batchId, { rejectWithValue }) => {
   try {
     const response = await api.get<ApiResponse<ReconciliationBatch>>(
-      `/api/v1/reconciliation/${batchId}`
+      `/reconciliation/${batchId}`
     );
     return response.data;
   } catch (err) {
@@ -123,7 +123,7 @@ export const uploadCsv = createAsyncThunk<
 >('batches/uploadCsv', async (file, { rejectWithValue }) => {
   try {
     const response = await api.upload<ApiResponse<UploadResponse>>(
-      '/api/v1/reconciliation/upload',
+      '/reconciliation/upload',
       file,
       'file'
     );

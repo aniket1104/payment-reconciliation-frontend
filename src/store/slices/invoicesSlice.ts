@@ -74,7 +74,7 @@ export const searchInvoices = createAsyncThunk<
     if (params.limit) queryParams.limit = params.limit;
 
     const response = await api.get<ApiResponse<InvoiceSearchResponse>>(
-      '/api/v1/invoices/search',
+      '/invoices/search',
       { params: queryParams }
     );
     return response.data;

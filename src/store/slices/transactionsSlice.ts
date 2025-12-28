@@ -200,7 +200,7 @@ export const fetchBatchTransactions = createAsyncThunk<
     // Use different type depending on pagination mode
     if (params.page) {
        const response = await api.get<ApiResponse<{ transactions: TransactionApiItem[]; pagination: { page: number; limit: number; total: number; totalPages: number } }>>(
-        `/api/v1/reconciliation/${params.batchId}/transactions`,
+        `/reconciliation/${params.batchId}/transactions`,
         { params: queryParams }
       );
       
@@ -211,7 +211,7 @@ export const fetchBatchTransactions = createAsyncThunk<
       };
     } else {
       const response = await api.get<ApiResponse<CursorPaginatedResponse<TransactionApiItem>>>(
-        `/api/v1/reconciliation/${params.batchId}/transactions`,
+        `/reconciliation/${params.batchId}/transactions`,
         { params: queryParams }
       );
 
@@ -238,7 +238,7 @@ export const fetchTransactionById = createAsyncThunk<
 >('transactions/fetchById', async (transactionId, { rejectWithValue }) => {
   try {
     const response = await api.get<ApiResponse<TransactionApiItem>>(
-      `/api/v1/transactions/${transactionId}`
+      `/transactions/${transactionId}`
     );
     return transformTransaction(response.data);
   } catch (err) {
@@ -257,7 +257,7 @@ export const confirmMatch = createAsyncThunk<
 >('transactions/confirm', async (transactionId, { rejectWithValue }) => {
   try {
     const response = await api.post<ApiResponse<ActionResponse>>(
-      `/api/v1/transactions/${transactionId}/confirm`
+      `/transactions/${transactionId}/confirm`
     );
     return transformTransaction(response.data.transaction);
   } catch (err) {
@@ -276,7 +276,7 @@ export const rejectMatch = createAsyncThunk<
 >('transactions/reject', async ({ transactionId, reason }, { rejectWithValue }) => {
   try {
     const response = await api.post<ApiResponse<ActionResponse>>(
-      `/api/v1/transactions/${transactionId}/reject`,
+      `/transactions/${transactionId}/reject`,
       { reason }
     );
     return transformTransaction(response.data.transaction);
@@ -296,7 +296,7 @@ export const manualMatch = createAsyncThunk<
 >('transactions/manualMatch', async ({ transactionId, invoiceId, reason }, { rejectWithValue }) => {
   try {
     const response = await api.post<ApiResponse<ActionResponse>>(
-      `/api/v1/transactions/${transactionId}/match`,
+      `/transactions/${transactionId}/match`,
       { invoiceId, reason }
     );
     return transformTransaction(response.data.transaction);
@@ -316,7 +316,7 @@ export const markExternal = createAsyncThunk<
 >('transactions/markExternal', async ({ transactionId, reason }, { rejectWithValue }) => {
   try {
     const response = await api.post<ApiResponse<ActionResponse>>(
-      `/api/v1/transactions/${transactionId}/external`,
+      `/transactions/${transactionId}/external`,
       { reason }
     );
     return transformTransaction(response.data.transaction);
@@ -336,7 +336,7 @@ export const bulkConfirm = createAsyncThunk<
 >('transactions/bulkConfirm', async (batchId, { rejectWithValue }) => {
   try {
     const response = await api.post<ApiResponse<BulkConfirmResponse>>(
-      '/api/v1/transactions/bulk-confirm',
+      '/transactions/bulk-confirm',
       { batchId }
     );
     return response.data;
