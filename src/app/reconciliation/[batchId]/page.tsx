@@ -94,10 +94,13 @@ export default function ReconciliationDashboardPage({ params }: PageProps) {
     hasMore,
     actionLoading,
     bulkConfirmLoading: isBulkConfirming,
+    pagination,
   } = useAppSelector((state) => state.transactions);
 
   // Local UI state
   const [activeTab, setActiveTab] = useState<TabFilter>(null);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState<number>(PAGINATION_DEFAULTS.PAGE_SIZE);
   const [manualMatchModalOpen, setManualMatchModalOpen] = useState(false);
   const [manualMatchTransaction, setManualMatchTransaction] = useState<BankTransaction | null>(null);
   const [isMatching, setIsMatching] = useState(false);
@@ -125,17 +128,23 @@ export default function ReconciliationDashboardPage({ params }: PageProps) {
     async (cursor?: string, append: boolean = false) => {
       const statusFilter = activeTab ? mapEnumToStatus(activeTab) : undefined;
       
-      dispatch(
-        fetchBatchTransactions({
-          batchId,
-          status: statusFilter,
-          cursor,
-          limit: PAGINATION_DEFAULTS.PAGE_SIZE,
-          append,
-        })
-      );
+      const fetchParams: any = {
+        batchId,
+        status: statusFilter,
+        limit,
+      };
+
+      // If relying on offset pagination
+      if (!cursor) {
+        fetchParams.page = page;
+      } else {
+        fetchParams.cursor = cursor;
+        fetchParams.append = append;
+      }
+
+      dispatch(fetchBatchTransactions(fetchParams));
     },
-    [dispatch, batchId, activeTab]
+    [dispatch, batchId, activeTab, page, limit]
   );
 
   // =========================================================================
@@ -305,6 +314,7 @@ export default function ReconciliationDashboardPage({ params }: PageProps) {
    */
   const handleTabChange = (tab: TabFilter) => {
     setActiveTab(tab);
+    setPage(1); // Reset to first page on tab change
     dispatch(setFilterStatus(tab));
   };
 
@@ -323,6 +333,21 @@ export default function ReconciliationDashboardPage({ params }: PageProps) {
   const handleRetryTransactions = () => {
     fetchTransactionsData();
   };
+
+  /**
+   * Handle pagination change
+   */
+  const handlePageChange = (newPage: number) => {
+     setPage(newPage);
+  }
+
+  /**
+   * Handle limit change
+   */
+  const handleLimitChange = (newLimit: number) => {
+    setLimit(newLimit);
+    setPage(1); // Reset to first page when limit changes
+  }
 
   /**
    * Retry fetching batch on error
@@ -484,6 +509,9 @@ export default function ReconciliationDashboardPage({ params }: PageProps) {
           onRetry={handleRetryTransactions}
           actionLoadingId={actionLoadingId}
           actionLoadingType={actionLoadingType}
+          pagination={pagination}
+          onPageChange={handlePageChange}
+          onLimitChange={handleLimitChange}
           onConfirm={handleConfirm}
           onReject={handleReject}
           onFindMatch={handleFindMatch}

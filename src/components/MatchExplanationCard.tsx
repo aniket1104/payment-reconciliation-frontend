@@ -252,14 +252,14 @@ export function MatchExplanationCard({
               {/* Name Similarity */}
               <ScoreIndicator
                 label="Name Similarity"
-                score={matchDetails.nameSimilarity}
+                score={matchDetails.breakdown?.rawNameSimilarity ?? matchDetails.nameSimilarity}
                 tooltip="How closely the transaction description matches the customer name. Higher scores indicate stronger name matches using fuzzy matching algorithms."
               />
 
               {/* Date Proximity */}
               <ScoreIndicator
                 label="Date Proximity"
-                score={matchDetails.dateProximity}
+                score={matchDetails.breakdown?.dateScore ?? matchDetails.dateProximity}
                 tooltip="How close the transaction date is to the invoice due date. Transactions closer to due dates score higher."
               />
             </div>
@@ -320,9 +320,9 @@ export function MatchExplanationCard({
               <InfoRow
                 label="Ambiguity Penalty"
                 value={
-                  matchDetails.ambiguityPenalty > 0 ? (
+                  (matchDetails.breakdown?.ambiguityPenalty ?? matchDetails.ambiguityPenalty ?? 0) > 0 ? (
                     <span className="text-red-600">
-                      -{matchDetails.ambiguityPenalty.toFixed(1)}%
+                      -{(matchDetails.breakdown?.ambiguityPenalty ?? matchDetails.ambiguityPenalty ?? 0).toFixed(1)}%
                     </span>
                   ) : (
                     <span className="text-emerald-600">None</span>

@@ -43,6 +43,13 @@ interface TransactionsState {
   actionLoading: { id: string; type: ActionType } | null;
   /** Bulk confirm in progress */
   bulkConfirmLoading: boolean;
+  /** Pagination metadata */
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 type ActionType = 'confirm' | 'reject' | 'match' | 'external';
@@ -53,6 +60,7 @@ interface FetchTransactionsParams {
   cursor?: string;
   limit?: number;
   append?: boolean;
+  page?: number;
 }
 
 interface TransactionApiItem {
@@ -155,6 +163,12 @@ const initialState: TransactionsState = {
   currentBatchId: null,
   actionLoading: null,
   bulkConfirmLoading: false,
+  pagination: {
+    page: 1,
+    limit: 50,
+    total: 0,
+    totalPages: 0,
+  },
 };
 
 // =============================================================================
@@ -165,7 +179,13 @@ const initialState: TransactionsState = {
  * Fetch transactions for a batch with cursor pagination
  */
 export const fetchBatchTransactions = createAsyncThunk<
-  { data: BankTransaction[]; nextCursor?: string; hasMore: boolean; append: boolean },
+  { 
+    data: BankTransaction[]; 
+    nextCursor?: string; 
+    hasMore?: boolean; 
+    append: boolean;
+    pagination?: { page: number; limit: number; total: number; totalPages: number }
+  },
   FetchTransactionsParams,
   { rejectValue: string }
 >('transactions/fetchBatch', async (params, { rejectWithValue }) => {
@@ -175,18 +195,33 @@ export const fetchBatchTransactions = createAsyncThunk<
     };
     if (params.cursor) queryParams.cursor = params.cursor;
     if (params.status) queryParams.status = params.status;
+    if (params.page) queryParams.page = params.page;
 
-    const response = await api.get<ApiResponse<CursorPaginatedResponse<TransactionApiItem>>>(
-      `/api/v1/reconciliation/${params.batchId}/transactions`,
-      { params: queryParams }
-    );
+    // Use different type depending on pagination mode
+    if (params.page) {
+       const response = await api.get<ApiResponse<{ transactions: TransactionApiItem[]; pagination: { page: number; limit: number; total: number; totalPages: number } }>>(
+        `/api/v1/reconciliation/${params.batchId}/transactions`,
+        { params: queryParams }
+      );
+      
+      return {
+        data: response.data.transactions.map(transformTransaction),
+        pagination: response.data.pagination,
+        append: false, // Offset pagination always replaces
+      };
+    } else {
+      const response = await api.get<ApiResponse<CursorPaginatedResponse<TransactionApiItem>>>(
+        `/api/v1/reconciliation/${params.batchId}/transactions`,
+        { params: queryParams }
+      );
 
-    return {
-      data: response.data.data.map(transformTransaction),
-      nextCursor: response.data.nextCursor,
-      hasMore: response.data.hasMore,
-      append: params.append || false,
-    };
+      return {
+        data: response.data.data.map(transformTransaction),
+        nextCursor: response.data.nextCursor,
+        hasMore: response.data.hasMore,
+        append: params.append || false,
+      };
+    }
   } catch (err) {
     const message = err instanceof ApiClientError ? err.message : 'Failed to fetch transactions';
     return rejectWithValue(message);
@@ -382,8 +417,14 @@ const transactionsSlice = createSlice({
         } else {
           state.transactions = action.payload.data;
         }
-        state.nextCursor = action.payload.nextCursor;
-        state.hasMore = action.payload.hasMore;
+        
+        if (action.payload.pagination) {
+          state.pagination = action.payload.pagination;
+          state.hasMore = action.payload.pagination.page < action.payload.pagination.totalPages;
+        } else {
+           state.nextCursor = action.payload.nextCursor;
+           state.hasMore = !!action.payload.hasMore;
+        }
       })
       .addCase(fetchBatchTransactions.rejected, (state, action) => {
         state.loading = false;

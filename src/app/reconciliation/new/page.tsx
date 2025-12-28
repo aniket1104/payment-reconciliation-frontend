@@ -126,9 +126,6 @@ export default function NewReconciliationPage() {
       {/* Header */}
       {/* Page Title */}
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-6 pt-4">
-        <h1 className="text-2xl font-bold text-foreground">
-          New Reconciliation
-        </h1>
         {isProcessing && (
           <button
             onClick={handleStartNew}

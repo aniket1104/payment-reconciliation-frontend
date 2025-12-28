@@ -106,18 +106,7 @@ export function ReconciliationTabs({
               <span>{tab.label}</span>
 
               {/* Count badge */}
-              {tab.count !== undefined && (
-                <span
-                  className={cn(
-                    'rounded-full px-2 py-0.5 text-xs font-medium tabular-nums',
-                    isActive && tab.colors
-                      ? cn(tab.colors.bg, tab.colors.text)
-                      : 'bg-muted text-muted-foreground'
-                  )}
-                >
-                  {tab.count.toLocaleString()}
-                </span>
-              )}
+
 
               {/* Active indicator */}
               {isActive && (

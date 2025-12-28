@@ -85,18 +85,24 @@ export interface ReconciliationBatch {
  * Match details for a transaction
  */
 export interface MatchDetails {
-  /** Confidence score (0-100) */
-  confidence: number;
-  /** Name similarity score */
-  nameSimilarity: number;
-  /** Date proximity score */
-  dateProximity: number;
-  /** Amount match indicator */
-  amountMatch: boolean;
-  /** Ambiguity penalty applied */
-  ambiguityPenalty: number;
-  /** Explanation of match reasoning */
+  breakdown?: {
+    rawTotal: number;
+    rawNameSimilarity: number;
+    weightedNameScore: number;
+    dateScore: number;
+    ambiguityPenalty: number;
+  };
   explanation?: string;
+  candidateCount?: number;
+  normalizedDescription?: string;
+  normalizedCustomerName?: string;
+  
+  // Legacy fields (may be missing in new API response)
+  confidence?: number;
+  nameSimilarity?: number;
+  dateProximity?: number;
+  amountMatch?: boolean;
+  ambiguityPenalty?: number;
 }
 
 /**
