@@ -9,20 +9,20 @@
  * Get the API base URL from environment variables.
  * Falls back to localhost:8080 for local development.
  */
-export function getApiBaseUrl(): string {
+  export function getApiBaseUrl(): string {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  if (!baseUrl) {
-    // In development, provide a helpful error message
-    if (process.env.NODE_ENV === 'development') {
-      console.warn(
-        '[env] NEXT_PUBLIC_API_BASE_URL is not set. Using default: http://localhost:8080'
-      );
+  // Ensure production URL has the correct prefix
+  if (baseUrl) {
+    const trimmed = baseUrl.trim().replace(/\/$/, '');
+    // If it doesn't end with /api/v1 or /api/v2 etc., and isn't localhost:8080/api
+    if (!trimmed.includes('/api')) {
+      return `${trimmed}/api/v1`;
     }
-    return 'http://localhost:8080';
+    return trimmed;
   }
 
-  return baseUrl;
+  return 'http://localhost:8080/api/v1';
 }
 
 /**
