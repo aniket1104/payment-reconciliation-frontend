@@ -46,59 +46,10 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Minimal Header */}
-      <header className="border-b border-border/40 bg-card/30 backdrop-blur-sm">
-        <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-6">
-          {/* Logo / Brand */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-              <svg
-                className="h-4 w-4 text-primary"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
-            <span className="text-sm font-medium text-foreground/80">Reconciliation</span>
-          </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-2">
-            <Button
-              asChild
-              size="sm"
-              className="h-8 w-8 p-0"
-              title="New Reconciliation"
-            >
-              <Link href="/reconciliation/new">
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                <span className="sr-only">New Reconciliation</span>
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </header>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-screen-xl px-6 py-8">
+      <div className="mx-auto max-w-screen-2xl px-6 py-8">
         {/* Stats Bar */}
         {!loading && batches.length > 0 && (
           <div className="mb-6 flex items-center gap-6">

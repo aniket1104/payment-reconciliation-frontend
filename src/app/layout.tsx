@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import { DesktopOnlyGuard } from '@/components/DesktopOnlyGuard';
 import { ReduxProvider } from '@/store/provider';
+import { Navbar } from '@/components/Navbar';
 import './globals.css';
 
 const geistSans = Geist({
@@ -62,7 +63,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans antialiased`}
       >
         <ReduxProvider>
-          <DesktopOnlyGuard>{children}</DesktopOnlyGuard>
+          <DesktopOnlyGuard>
+            <Navbar />
+            {children}
+          </DesktopOnlyGuard>
           <Toaster />
         </ReduxProvider>
       </body>

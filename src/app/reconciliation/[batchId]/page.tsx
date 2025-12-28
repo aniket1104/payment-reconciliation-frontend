@@ -365,16 +365,14 @@ export default function ReconciliationDashboardPage({ params }: PageProps) {
   if (batchError || !batch) {
     return (
       <main className="min-h-screen bg-background">
-        <header className="border-b border-border bg-card">
-          <div className="mx-auto flex h-16 max-w-screen-2xl items-center px-6">
-            <Link
-              href="/reconciliation/new"
-              className="text-sm text-muted-foreground hover:text-foreground"
-            >
-              ← Back to Upload
-            </Link>
-          </div>
-        </header>
+        <div className="mx-auto flex h-16 max-w-screen-2xl items-center px-6">
+          <Link
+            href="/reconciliation/new"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            ← Back to Upload
+          </Link>
+        </div>
         <div className="mx-auto max-w-screen-2xl px-6 py-8">
           <div className="flex flex-col items-center justify-center rounded-lg border border-border bg-card p-12 text-center">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
@@ -419,8 +417,9 @@ export default function ReconciliationDashboardPage({ params }: PageProps) {
   return (
     <main className="min-h-screen bg-background">
       {/* Page header */}
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-6">
+      {/* Page Title */}
+      <div className="border-b border-border bg-background pt-4 pb-4">
+        <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-6">
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-xl font-semibold text-foreground">
@@ -439,14 +438,8 @@ export default function ReconciliationDashboardPage({ params }: PageProps) {
             </div>
             <p className="mt-0.5 text-sm text-muted-foreground">{batch.filename}</p>
           </div>
-          <Link
-            href="/reconciliation/new"
-            className="text-sm text-muted-foreground hover:text-foreground"
-          >
-            ← New Upload
-          </Link>
         </div>
-      </header>
+      </div>
 
       {/* Main content */}
       <div className="mx-auto max-w-screen-2xl space-y-6 px-6 py-8">

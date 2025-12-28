@@ -72,7 +72,7 @@ const INVOICE_STATUS_LABELS: Record<InvoiceStatus, string> = {
  */
 function EmptyInvoiceState() {
   return (
-    <Card className="h-full">
+    <Card>
       <CardHeader className="pb-4">
         <CardTitle className="text-lg">Matched Invoice</CardTitle>
       </CardHeader>
@@ -117,7 +117,7 @@ export function InvoiceDetailsCard({ invoice }: InvoiceDetailsCardProps) {
   };
 
   return (
-    <Card className="h-full">
+    <Card>
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Matched Invoice</CardTitle>

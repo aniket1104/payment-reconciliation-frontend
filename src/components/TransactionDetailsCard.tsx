@@ -61,7 +61,7 @@ export function TransactionDetailsCard({ transaction }: TransactionDetailsCardPr
   };
 
   return (
-    <Card className="h-full">
+    <Card>
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Bank Transaction</CardTitle>

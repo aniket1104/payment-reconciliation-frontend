@@ -124,24 +124,23 @@ export default function NewReconciliationPage() {
   return (
     <main className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-6">
-          <h1 className="text-xl font-semibold text-foreground">
-            New Reconciliation
-          </h1>
-          {isProcessing && (
-            <button
-              onClick={handleStartNew}
-              className="text-sm text-muted-foreground hover:text-foreground"
-            >
-              Start New Upload
-            </button>
-          )}
-        </div>
-      </header>
+      {/* Page Title */}
+      <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-6 pt-4">
+        <h1 className="text-2xl font-bold text-foreground">
+          New Reconciliation
+        </h1>
+        {isProcessing && (
+          <button
+            onClick={handleStartNew}
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Start New Upload
+          </button>
+        )}
+      </div>
 
       {/* Main content */}
-      <div className="mx-auto max-w-screen-xl px-6 py-12">
+      <div className="mx-auto max-w-screen-2xl px-6 py-12">
         <div className="flex justify-center">
           {/* Upload state */}
           {!isProcessing && (

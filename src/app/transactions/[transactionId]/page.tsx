@@ -203,8 +203,9 @@ export default function TransactionDetailPage({ params }: PageProps) {
   return (
     <main className="bg-background min-h-screen">
       {/* Page header */}
-      <header className="border-border bg-card border-b">
-        <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-6">
+      {/* Page Title */}
+      <div className="border-border bg-background border-b pt-4 pb-4">
+        <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-6">
           <div>
             {/* Breadcrumb */}
             <nav className="mb-1 flex items-center gap-2 text-sm">
@@ -240,22 +241,19 @@ export default function TransactionDetailPage({ params }: PageProps) {
             <Link href={backLink}>← Back to Reconciliation</Link>
           </Button>
         </div>
-      </header>
+      </div>
 
       {/* Main content - Two column layout */}
       <div className="mx-auto max-w-screen-2xl px-6 py-8">
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Left Column: Bank Transaction Details */}
-          <div>
+        <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+          {/* Left Column: Bank Transaction & Matched Invoice */}
+          <div className="space-y-6">
             <TransactionDetailsCard transaction={transaction} />
+            <InvoiceDetailsCard invoice={invoiceForCard} />
           </div>
 
-          {/* Right Column: Invoice Details + Match Explanation */}
-          <div className="space-y-6">
-            {/* Invoice Details Card */}
-            <InvoiceDetailsCard invoice={invoiceForCard} />
-
-            {/* Match Explanation Card */}
+          {/* Right Column: Match Explanation */}
+          <div>
             <MatchExplanationCard
               matchDetails={transaction.matchDetails}
               confidenceScore={transaction.confidenceScore}
